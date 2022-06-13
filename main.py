@@ -17,11 +17,14 @@ from lib.delete import *
 def checkUnique(form_group):
     #Simple check to make sure select form submission is unique.
     #Checks a 1 layer k,v dictionary for redundant values.
+
     for key in list(form_group.keys()):
         if(form_group[key] == None):
             continue
         elif(key == 'upload_image'):
             continue
+        elif(form_group[key] == 0 and form_group['s2'] == 0 and form_group['s3'] == 0):
+            break
 
         for other_key in list(form_group.keys()):
             if(form_group[key] == form_group[other_key] and key != other_key):
@@ -75,13 +78,13 @@ def main():
         }
 
         # Finally save data
-        save_user_selections(database_path, user_info)
+        if(collected_inputs['s1'] != 0 and collected_inputs['s2'] != 0 and collected_inputs['s3'] != 0): # If
+            save_user_selections(database_path, user_info)
 
         pic = collected_inputs['upload_image']
         if(pic != None):
             with open(shirt_image_dir+pic['filename'], 'wb') as f:
                 f.write(pic['content'])
-                #TODO record `info.user`
                 updateImageACL(database_path, info.user_ip, pic['filename'])
             put_markdown("### Refresh to see changes.")
 
