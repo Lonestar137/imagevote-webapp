@@ -1,0 +1,2 @@
+python-decouple==3.6
+pywebio==1.6.1
